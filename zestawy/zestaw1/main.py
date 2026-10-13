@@ -9,16 +9,16 @@
 # 3. Napisać program do generowania grafów losowych G(n, l) oraz G(n, p).
 
 
-import neighbours_list
-
+import adjacency_matrix
+import adjacency_list
 def main():
-    graph = dict()
-    x = neighbours_list.neighbours_list()
-    graph = x.add_vertex(1, [2, 3], graph)
+
+    x = adjacency_list.list()
+    V2 = 4
+    edges2 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    graph = x.create_list(V2, edges2)
     print(graph)
-    graph = x.add_vertex(2, [3, 4], graph)
-    print(graph)
-    graph = x.drop_vertex(1, graph)
+    graph = x.add_vertex(4, {2, 3}, graph)
     print(graph)
 
 
