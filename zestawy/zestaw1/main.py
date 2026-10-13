@@ -8,8 +8,19 @@
 #
 # 3. Napisać program do generowania grafów losowych G(n, l) oraz G(n, p).
 
+
+import neighbours_list
+
 def main():
-    print("zestaw1")
+    graph = dict()
+    x = neighbours_list.neighbours_list()
+    graph = x.add_vertex(1, [2, 3], graph)
+    print(graph)
+    graph = x.add_vertex(2, [3, 4], graph)
+    print(graph)
+    graph = x.drop_vertex(1, graph)
+    print(graph)
+
 
 if __name__ == "__main__":
     main()
