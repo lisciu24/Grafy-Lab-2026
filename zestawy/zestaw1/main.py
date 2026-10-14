@@ -11,6 +11,7 @@
 
 import adjacency_matrix
 import adjacency_list
+import incidence_matrix
 def main():
 
     x = adjacency_list.list()
@@ -30,6 +31,19 @@ def main():
     print(graph)
     graph = y.drop_vertex(2, graph)
     print(graph)
+
+    z = incidence_matrix.matrix()
+    V3 = 4
+    edges3 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    graph = z.create_matrix(V3, edges3)
+    for line in graph:
+        print(line)
+    graph = z.add_vertex([2, 3], graph)
+    for line in graph:
+        print(line)
+    graph = z.drop_vertex(0, graph)
+    for line in graph:
+        print(line)
 
 if __name__ == "__main__":
     main()
