@@ -14,13 +14,22 @@ import adjacency_list
 def main():
 
     x = adjacency_list.list()
-    V2 = 4
-    edges2 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
-    graph = x.create_list(V2, edges2)
+    V1 = 4
+    edges1 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    graph = x.create_list(V1, edges1)
     print(graph)
     graph = x.add_vertex(4, {2, 3}, graph)
     print(graph)
 
+    y = adjacency_matrix.matrix()
+    V2 = 4
+    edges2 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    graph = y.create_matrix(V2, edges2)
+    print(graph)
+    graph = y.add_vertex([2, 3], graph)
+    print(graph)
+    graph = y.drop_vertex(2, graph)
+    print(graph)
 
 if __name__ == "__main__":
     main()
