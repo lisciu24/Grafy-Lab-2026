@@ -1,5 +1,6 @@
-class matrix:
-    def create_matrix(self, vertices: int, edges: list[tuple[int, int]])->list[list[int]]:
+class adjacency_matrix:
+    @staticmethod
+    def create_matrix(vertices: int, edges: list[tuple[int, int]])->list[list[int]]:
         matrix = [[0] * vertices for _ in range(vertices)]
         
         for edge in edges:
@@ -9,7 +10,8 @@ class matrix:
         
         return matrix
 
-    def add_vertex(self, neighbours: list[int], graph: list[list[int]]) -> list[list[int]]:
+    @staticmethod
+    def add_vertex(neighbours: list[int], graph: list[list[int]]) -> list[list[int]]:
         new_vertex = len(graph)
         
         new_row = []
@@ -28,18 +30,11 @@ class matrix:
 
         return graph
 
-    def drop_vertex(self, vertex_number: int, graph: list[list[int]]) -> list[list[int]]:
+    @staticmethod
+    def drop_vertex(vertex_number: int, graph: list[list[int]]) -> list[list[int]]:
         graph.pop(vertex_number)
         
         for row in graph:
             row.pop(vertex_number)
             
         return graph
-
-
-        
-    def to_adjacency_list(graph: dict(int, list[int])):
-        pass
-
-    def to_incidence_matrix(graph: dict(int, list[int])):
-        pass
