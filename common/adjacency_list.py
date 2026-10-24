@@ -1,4 +1,4 @@
-def create_list(vertices: int, edges: list[tuple[int, int]]) -> dict(int, set[int]):
+def create_list(vertices: int, edges: list[tuple[int, int]]) -> dict[int, set[int]]:
     if vertices < 0:
         raise ValueError("Number of vertices cannot be a negative number.")
     if len(edges) > vertices * (vertices - 1) / 2:
@@ -21,7 +21,7 @@ def create_list(vertices: int, edges: list[tuple[int, int]]) -> dict(int, set[in
 
     return adjacency_list
 
-def add_vertex(vertex_number: int, neighbours: set[int], graph: dict(int, set[int])) -> dict(int, set[int]):
+def add_vertex(vertex_number: int, neighbours: set[int], graph: dict[int, set[int]]) -> dict[int, set[int]]:
     graph.setdefault(vertex_number, set())
     current_neighbours = graph[vertex_number]
     new_neighbours = current_neighbours.union(neighbours)
@@ -30,14 +30,14 @@ def add_vertex(vertex_number: int, neighbours: set[int], graph: dict(int, set[in
         graph[n] = graph.setdefault(n, set()).union({vertex_number})
     return graph
 
-def drop_vertex(vertex_number: int, graph: dict(int, set[int])) -> dict(int, set[int]):
+def drop_vertex(vertex_number: int, graph: dict[int, set[int]]) -> dict[int, set[int]]:
     if vertex_number in graph:
         for key in graph[vertex_number]:
             graph[key].discard(vertex_number)
         graph.pop(vertex_number)
     return graph
 
-def get_edges(graph: dict(int, set[int])) -> (int, list[tuple[int, int]]):
+def get_edges(graph: dict[int, set[int]]) -> tuple[int, list[tuple[int, int]]]:
     size = len(graph)
     unique_edges = set()
 

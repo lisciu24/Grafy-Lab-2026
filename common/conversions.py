@@ -13,11 +13,11 @@ def adjacency_matrix_to_adjacency_list(graph: list[list[int]])->dict[int, set[in
     size, edges = adjacency_matrix.get_edges(graph)
     return adjacency_list.create_list(size, edges)
 
-def adjacency_matrix_to_incidence_matrix(graph: list[list[int]])->dict[int, set[int]]:
+def adjacency_matrix_to_incidence_matrix(graph: list[list[int]])->list[list[int]]:
     size, edges = adjacency_matrix.get_edges(graph)
     return incidence_matrix.create_matrix(size, edges)
 
-def incidence_matrix_to_adjacency_list(graph: list[list[int]])->list[list[int]]:
+def incidence_matrix_to_adjacency_list(graph: list[list[int]])->dict[int, set[int]]:
     size, edges = incidence_matrix.get_edges(graph)
     return adjacency_list.create_list(size, edges)
 

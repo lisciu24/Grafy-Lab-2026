@@ -47,7 +47,7 @@ def drop_vertex(vertex_number: int, graph: list[list[int]]) -> list[list[int]]:
             row.pop(column)
     return graph
 
-def get_edges(graph: list[list[int]]) -> (int, list[tuple[int, int]]):
+def get_edges(graph: list[list[int]]) -> tuple[int, list[tuple[int, int]]]:
     size = len(graph)
     col_size = len(graph[0])
     edges = []

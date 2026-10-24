@@ -18,7 +18,7 @@ import common.conversions as conversions
 def main():
     print("Adjacency list")
     V1 = 4
-    edges1 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    edges1 = [(0, 1), (1, 2), (1, 3), (2, 3), (3, 0)]
     graph = adjacency_list.create_list(V1, edges1)
     print(graph)
     graph2 = conversions.adjacency_list_to_adjacency_matrix(graph)
@@ -33,7 +33,7 @@ def main():
 
     print("Adjacency matrix")
     V2 = 4
-    edges2 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    edges2 = [(0, 1), (1, 2), (1, 3), (2, 3), (3, 0)]
     graph = adjacency_matrix.create_matrix(V2, edges2)
     for line in graph:
         print(line)
@@ -50,7 +50,7 @@ def main():
     
     print("Incidence matrix")
     V3 = 4
-    edges3 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
+    edges3 = [(0, 1), (1, 2), (1, 3), (2, 3), (3, 0)]
     graph = incidence_matrix.create_matrix(V3, edges3)
     for line in graph:
         print(line)
