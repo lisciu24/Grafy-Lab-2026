@@ -19,7 +19,7 @@ def main():
     print("Adjacency list")
     V1 = 4
     edges1 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
-    graph = adjacency_list.adjacency_list.create_list(V1, edges1)
+    graph = adjacency_list.create_list(V1, edges1)
     print(graph)
     graph2 = conversions.adjacency_list_to_adjacency_matrix(graph)
     for line in graph2:
@@ -27,14 +27,14 @@ def main():
     graph3 = conversions.adjacency_list_to_incidence_matrix(graph)
     for line in graph3:
         print(line)
-    graph = adjacency_list.adjacency_list.add_vertex(4, {2, 3}, graph)
+    graph = adjacency_list.add_vertex(4, {2, 3}, graph)
     print(graph)
 
 
     print("Adjacency matrix")
     V2 = 4
     edges2 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
-    graph = adjacency_matrix.adjacency_matrix.create_matrix(V2, edges2)
+    graph = adjacency_matrix.create_matrix(V2, edges2)
     for line in graph:
         print(line)
     graph2 = conversions.adjacency_matrix_to_adjacency_list(graph)
@@ -42,16 +42,16 @@ def main():
     graph3 = conversions.adjacency_matrix_to_incidence_matrix(graph)
     for line in graph3:
         print(line)
-    graph = adjacency_matrix.adjacency_matrix.add_vertex([2, 3], graph)
+    graph = adjacency_matrix.add_vertex([2, 3], graph)
     print(graph)
-    graph = adjacency_matrix.adjacency_matrix.drop_vertex(2, graph)
+    graph = adjacency_matrix.drop_vertex(2, graph)
     print(graph)
 
     
     print("Incidence matrix")
     V3 = 4
     edges3 = [[0, 1], [1, 2], [1, 3], [2, 3], [3, 0]]
-    graph = incidence_matrix.incidence_matrix.create_matrix(V3, edges3)
+    graph = incidence_matrix.create_matrix(V3, edges3)
     for line in graph:
         print(line)
     graph2 = conversions.incidence_matrix_to_adjacency_matrix(graph)
@@ -59,10 +59,10 @@ def main():
         print(line)
     graph3 = conversions.incidence_matrix_to_adjacency_list(graph)
     print(graph3)
-    graph = incidence_matrix.incidence_matrix.add_vertex([2, 3], graph)
+    graph = incidence_matrix.add_vertex([2, 3], graph)
     for line in graph:
         print(line)
-    graph = incidence_matrix.incidence_matrix.drop_vertex(0, graph)
+    graph = incidence_matrix.drop_vertex(0, graph)
     for line in graph:
         print(line)
 
