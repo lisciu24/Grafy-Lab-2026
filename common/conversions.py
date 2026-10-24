@@ -1,6 +1,6 @@
-import adjacency_matrix
-import adjacency_list
-import incidence_matrix
+import common.adjacency_matrix as adjacency_matrix
+import common.adjacency_list as adjacency_list
+import common.incidence_matrix as incidence_matrix
 def adjacency_list_to_adjacency_matrix(graph: dict[int, set[int]])->list[list[int]]:
     size, edges = adjacency_list.get_edges(graph)
     return adjacency_matrix.create_matrix(size, edges)

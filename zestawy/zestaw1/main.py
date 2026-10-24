@@ -9,12 +9,12 @@
 # 3. Napisać program do generowania grafów losowych G(n, l) oraz G(n, p).
 
 
-import adjacency_matrix
-import adjacency_list
-import incidence_matrix
-from circle_graph import draw_circle_graph
-import generate_random_graph
-import conversions
+import common.adjacency_matrix as adjacency_matrix
+import common.adjacency_list as adjacency_list
+import common.incidence_matrix as incidence_matrix
+from common.circle_graph import draw_circle_graph
+import common.generate_random_graph as generate_random_graph
+import common.conversions as conversions
 def main():
     print("Adjacency list")
     V1 = 4

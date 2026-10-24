@@ -1,1 +1,0 @@
-"""Graph representation encoding module"""
