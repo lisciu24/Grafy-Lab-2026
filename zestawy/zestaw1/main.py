@@ -12,6 +12,8 @@
 import adjacency_matrix
 import adjacency_list
 import incidence_matrix
+from circle_graph import draw_circle_graph
+import generate_random_graph
 import conversions
 def main():
     print("Adjacency list")
@@ -63,6 +65,10 @@ def main():
     graph = incidence_matrix.incidence_matrix.drop_vertex(0, graph)
     for line in graph:
         print(line)
+
+    size, edges = generate_random_graph.generate_random_graph(20, edges = 190)
+    print(len(edges))
+    draw_circle_graph(size, edges)
 
 if __name__ == "__main__":
     main()

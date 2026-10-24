@@ -1,8 +1,18 @@
 class adjacency_list:
     @staticmethod
     def create_list(vertices: int, edges: list[tuple[int, int]]) -> dict(int, set[int]):
+        if vertices < 0:
+            raise ValueError("Number of vertices cannot be a negative number.")
+        if len(edges) > vertices * (vertices - 1) / 2:
+            raise ValueError("Number of edges out of possible range.")
+        for edge in edges:
+            if edge[0] > vertices - 1:
+                raise ValueError(f"Edge ({edge[0]}, {edge[1]}) is incorrect. Vertex with label {edge[0]} does not exist.")
+            if edge[1] > vertices - 1:
+                raise ValueError(f"Edge ({edge[0]}, {edge[1]}) is incorrect. Vertex with label {edge[1]} does not exist.")
+        
         adjacency_list = dict()
-
+        
         for i in range(vertices):
             adjacency_list[i] = set()
 

@@ -2,6 +2,15 @@ class incidence_matrix:
     
     @staticmethod
     def create_matrix(vertices: int, edges: list[tuple[int, int]])->list[list[int]]:
+        if vertices < 0:
+            raise ValueError("Number of vertices cannot be a negative number.")
+        if len(edges) > vertices * (vertices - 1) / 2:
+            raise ValueError("Number of edges out of possible range.")
+        for edge in edges:
+            if edge[0] > vertices - 1:
+                raise ValueError(f"Edge ({edge[0]}, {edge[1]}) is incorrect. Vertex with label {edge[0]} does not exist.")
+            if edge[1] > vertices - 1:
+                raise ValueError(f"Edge ({edge[0]}, {edge[1]}) is incorrect. Vertex with label {edge[1]} does not exist.")
         matrix = [[0] * len(edges) for _ in range(vertices)]
 
         for v in range(vertices):
