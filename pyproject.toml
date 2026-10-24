@@ -1,0 +1,9 @@
+[project]
+name = "grafy-lab-2026"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "networkx>=3.7",
+    "pyqt6>=6.11.0",
+]
