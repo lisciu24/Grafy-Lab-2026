@@ -38,3 +38,13 @@ class adjacency_matrix:
             row.pop(vertex_number)
             
         return graph
+
+    @staticmethod
+    def get_edges(graph: list[list[int]]) -> (int, list[tuple[int, int]]):
+        size = len(graph)
+        edges = []
+        for row in range(size):
+            for col in range(row, size):
+                if graph[row][col] == 1:
+                    edges.append((row, col))
+        return (size, edges)

@@ -42,3 +42,17 @@ class incidence_matrix:
             for column in reversed(neighbours_columns):
                 row.pop(column)
         return graph
+
+    @staticmethod
+    def get_edges(graph: list[list[int]]) -> (int, list[tuple[int, int]]):
+        size = len(graph)
+        col_size = len(graph[0])
+        edges = []
+        for col in range(col_size):
+            edge = []
+            for row in range(size):
+                if graph[row][col] == 1:
+                    edge.append(row)
+            if len(edge) == 2:
+                edges.append((edge[0], edge[1]))
+        return size, edges

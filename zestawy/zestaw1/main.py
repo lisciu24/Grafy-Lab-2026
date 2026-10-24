@@ -52,6 +52,11 @@ def main():
     graph = incidence_matrix.incidence_matrix.create_matrix(V3, edges3)
     for line in graph:
         print(line)
+    graph2 = conversions.incidence_matrix_to_adjacency_matrix(graph)
+    for line in graph2:
+        print(line)
+    graph3 = conversions.incidence_matrix_to_adjacency_list(graph)
+    print(graph3)
     graph = incidence_matrix.incidence_matrix.add_vertex([2, 3], graph)
     for line in graph:
         print(line)

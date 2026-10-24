@@ -30,3 +30,15 @@ class adjacency_list:
                 graph[key].discard(vertex_number)
             graph.pop(vertex_number)
         return graph
+
+    @staticmethod
+    def get_edges(graph: dict(int, set[int])) -> (int, list[tuple[int, int]]):
+        size = len(graph)
+        unique_edges = set()
+    
+        for vertex, neighbors in graph.items():
+            for neighbor in neighbors:
+                edge = tuple(sorted((vertex, neighbor)))
+                unique_edges.add(edge)
+                
+        return (size, list(unique_edges))
