@@ -31,7 +31,7 @@ def main():
 
     print("START: s = 0")
     for end in range(len(d)):
-        dijkstra.print_path(d, p, 0, end)
+        util.print_path(d, p, 0, end)
     print()
 
     dm = dijkstra.distance_matrix(graph, weights)
