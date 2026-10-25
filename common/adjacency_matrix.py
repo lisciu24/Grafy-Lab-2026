@@ -1,4 +1,5 @@
-def create_matrix(vertices: int, edges: list[tuple[int, int]])->list[list[int]]:
+def create_matrix(vertices: int, edges: list[tuple[int, int]], *, 
+                  digraph: bool = False)->list[list[int]]:
     if vertices < 0:
         raise ValueError("Number of vertices cannot be a negative number.")
     if len(edges) > vertices * (vertices - 1) / 2:
@@ -13,18 +14,20 @@ def create_matrix(vertices: int, edges: list[tuple[int, int]])->list[list[int]]:
     for edge in edges:
         u, v = edge
         matrix[u][v] = 1
-        matrix[v][u] = 1
+        if not digraph:
+            matrix[v][u] = 1
     
     return matrix
 
-def add_vertex(neighbours: list[int], graph: list[list[int]]) -> list[list[int]]:
+def add_vertex(neighbours: list[int], graph: list[list[int]], *, 
+               digraph: bool = False) -> list[list[int]]:
     new_vertex = len(graph)
     
     new_row = []
 
     for i in range(new_vertex):
         if i in neighbours:
-            graph[i].append(1)
+            graph[i].append(1 if not digraph else 0)
             new_row.append(1)
         else:
             graph[i].append(0)
@@ -44,11 +47,12 @@ def drop_vertex(vertex_number: int, graph: list[list[int]]) -> list[list[int]]:
         
     return graph
 
-def get_edges(graph: list[list[int]]) -> tuple[int, list[tuple[int, int]]]:
+def get_edges(graph: list[list[int]], *, 
+              digraph: bool = False) -> tuple[int, list[tuple[int, int]]]:
     size = len(graph)
     edges = []
     for row in range(size):
-        for col in range(row, size):
+        for col in range(row if not digraph else 0, size):
             if graph[row][col] == 1:
                 edges.append((row, col))
     return (size, edges)
