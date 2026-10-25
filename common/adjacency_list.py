@@ -50,6 +50,6 @@ def get_edges(graph: dict[int, set[int]]) -> tuple[int, list[tuple[int, int]]]:
 
 def from_file(filename: str) -> dict[int, set[int]]: 
     with open(filename, 'r') as f:
-        l = {int(line.split('.')[0]) : {int(num) for num in line.split('.')[1].split()} for line in f}
+        l = {int(line.split('.')[0]) - 1 : {int(num) - 1 for num in line.split('.')[1].split()} for line in f}
 
     return l
