@@ -52,3 +52,8 @@ def get_edges(graph: list[list[int]]) -> tuple[int, list[tuple[int, int]]]:
             if graph[row][col] == 1:
                 edges.append((row, col))
     return (size, edges)
+
+def from_file(filename: str) -> list[list[int]]: 
+    with open(filename, 'r') as f:
+        m = [[int(num) for num in line.split()] for line in f]
+    return m
