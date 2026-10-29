@@ -1,4 +1,4 @@
-from random import sample, random
+from random import sample, random, randint
 def generate_random_graph(vertices: int, edges: int | None = None, edges_prob: float | None = None, *, digraph: bool = False) -> tuple[int, list[tuple[int, int]]]:
     if vertices < 0:
         raise ValueError("Number of vertices cannot be a negative number.")
@@ -32,5 +32,8 @@ def generate_random_graph(vertices: int, edges: int | None = None, edges_prob: f
             raise ValueError("Value out of possible range.")
 
     raise Exception("Should not ever get here!")
+
+def generate_random_weights(graph: list[list[int]], min_w: int, max_w: int) -> list[list[int]]:
+    return [[randint(min_w, max_w) if graph[v][u] else 0 for u in range(len(graph))] for v in range(len(graph))]
 
 

@@ -40,3 +40,6 @@ def draw_graph(graph: list[list[int]], weights: list[list[int]] | None = None, *
     nx.draw_networkx_edge_labels(G, pos, edge_labels)
     plt.tight_layout()
     plt.show()
+
+def transpose(m: list[list[int]]):
+    return [list(row) for row in zip(*m)]
