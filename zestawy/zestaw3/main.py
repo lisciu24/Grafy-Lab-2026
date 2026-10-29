@@ -19,28 +19,28 @@
 #
 # 5. Wyznaczyć minimalne drzewo rozpinające (algorytm Prima lub Kruskala).
 
-from common import adjacency_list, adjacency_matrix, conversions
-from common import dijkstra, util, spanning_tree
+from common import adjacency_list, adjacency_matrix, conversions, shortest_path
+from common import util, spanning_tree
 
 def main():
     graph = conversions.adjacency_list_to_adjacency_matrix(
         adjacency_list.from_file("zestawy/zestaw3/input_graph.txt"))
     weights = adjacency_matrix.from_file("zestawy/zestaw3/input_weights.txt")
 
-    d, p = dijkstra.dijkstra(graph, weights, 0)
+    _, d, p = shortest_path.dijkstra(graph, weights, 0)
 
     print("START: s = 0")
     for end in range(len(d)):
         util.print_path(d, p, 0, end)
     print()
 
-    dm = dijkstra.distance_matrix(graph, weights)
+    dm = shortest_path.distance_matrix(graph, weights, shortest_path.dijkstra)
     util.print_matrix(dm)
     print()
 
-    i, d = dijkstra.get_graph_center(dm)
+    i, d = shortest_path.get_graph_center(dm)
     print(f"Centrum = {i} (suma odleglosci: {d})")
-    i, d = dijkstra.get_graph_minmax_center(dm)
+    i, d = shortest_path.get_graph_minmax_center(dm)
     print(f"Centrum minimax = {i} (odleglosc od najdalszego: {d})")
 
     print()
