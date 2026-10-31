@@ -17,12 +17,12 @@
 # 6. Napisać program do sprawdzania (dla małych grafów), czy graf jest
 #    hamiltonowski.
 
-import common.incidence_matrix as incidence_matrix
+import random
+from collections import Counter
+
+from common import incidence_matrix
 from common.circle_graph import draw_circle_graph
 from common.generate_random_graph import generate_random_graph
-from collections import Counter
-import random
-import time
 
 
 def check_if_graphical(sequence: list[int]) -> bool:
@@ -63,21 +63,27 @@ def generate_graph_from_sequence(sequence: list[int]):
 
 
 def randomize_graph(edges, n):
-    random.seed(time.time())
+    if len(edges) < 2: 
+        return
+        
     for _ in range(n):
         index1 = random.randrange(0, len(edges))
         a, b = edges[index1]
+        
         invalid = True
-        while invalid:
-            index2 = random.randrange(0, len(edges) - 1)
+        retries = 0
+        while invalid and retries < 50:
+            index2 = random.randrange(0, len(edges))
             c, d = edges[index2]
-            if index2 != index1 and c not in (a, b) and d not in (a, b):
-                if (a, d) not in edges and (d, a) not in edges and (b, c) not in edges and (c, b) not in edges: 
-                    invalid = False
-
-        edges[index1] = (a, d)
-        edges[index2] = (b, c)
-
+            if (index2 != index1 and c not in (a, b) and d not in (a, b)
+                    and (a, d) not in edges and (d, a) not in edges
+                    and (b, c) not in edges and (c, b) not in edges):
+                invalid = False
+            retries += 1
+            
+        if not invalid:
+            edges[index1] = (a, d)
+            edges[index2] = (b, c)
 
 
 def components_R(nr, v, edges, comp, size):
@@ -86,7 +92,6 @@ def components_R(nr, v, edges, comp, size):
         if comp[u] == -1:
             comp[u] = nr
             components_R(nr, u, edges, comp, size)
-
 
 
 def components(size, edges):
@@ -120,6 +125,91 @@ def random_k_regular_graph(n, k):
     return v, e
 
 
+def generate_eulerian(size = 0):
+    if not size:
+        size = random.randint(3, 10)
+    if size < 3:
+        print("eulerian graph needs at least 3 vertices")
+        return None
+
+    solid = False
+
+    while not solid:
+        degrees = [random.randrange(2, size, 2) for _ in range(size)]        
+        
+        while not check_if_graphical(degrees):
+            degrees = [random.randrange(2, size, 2) for _ in range(size)]
+
+        v, e = generate_graph_from_sequence(degrees)
+        randomize_graph(e, v)
+        members = biggest_component(v, e)
+        
+        if len(members) == v:
+            solid = True
+            
+    return v, e
+
+
+def find_euler_cycle(v, e):
+    edges = e.copy()
+    curr = 0
+    cycle = [curr]
+
+    while edges:
+        neighbor_edges = [edge for edge in edges if curr in edge]
+
+        for edge in neighbor_edges:
+            nxt = edge[1] if edge[0] == curr else edge[0]
+
+            if len(neighbor_edges) == 1: # only possibility - need to go this way
+                edges.remove(edge)
+                curr = nxt
+                cycle.append(curr)
+                break
+
+            comp_before = max(components(v, edges))
+            edges_without = [x for x in edges if x != edge]
+            comp_after = max(components(v, edges_without))
+
+            if comp_after <= comp_before: # not a bridge - can go this way
+                edges.remove(edge)
+                curr = nxt
+                cycle.append(curr)
+                break
+
+    return cycle
+
+
+def find_hamilton(v, e):
+    adj = {i: [] for i in range(v)}
+    for a, b in e:
+        adj[a].append(b)
+        adj[b].append(a)
+
+    path = [0]
+
+    def backtrack(curr):
+        if len(path) == v:
+            return 0 in adj[curr] # is it a cycle?
+                
+        for neighbor in adj[curr]:
+            if neighbor not in path:
+                path.append(neighbor) # try this new path
+                
+                if backtrack(neighbor): # if true - hamilton found
+                    return True
+                    
+                path.pop() # otherwise pop - backtracking
+
+        return False
+
+    if backtrack(0): #starting backtracking ad vertex 0. if returns true - hamilton found
+        path.append(0)  
+        return path
+    else:
+        return None     
+    
+    
 
 
 
@@ -156,16 +246,18 @@ def main():
 
     #TASK 3
     print("\n\n===task 3 - find biggest graph component")
-    vertices, edges = generate_random_graph(20, 10)
+    vertices, edges = generate_random_graph(10, 6)
     members = biggest_component(vertices, edges)
     print("biggest component members: ", members)
-    draw_circle_graph(vertices, edges)  #does not draw vertices with no neighbors
-
+    draw_circle_graph(vertices, edges)
 
 
     #TASK 4
-
-
+    print("\n\n===task 4 - generate random Eulerian graph and find Eulerian cycle")
+    v, e = generate_eulerian(8)
+    cycle = find_euler_cycle(v, e)
+    print("cycle: ", cycle)
+    draw_circle_graph(v, e)
 
 
     #TASK 5
@@ -175,10 +267,16 @@ def main():
 
 
     #TASK 6
+    print("\n\n===task 6 - find hamilton")
+    cycle = find_hamilton(v, e)
+    if cycle:
+        print("cycle: ", cycle)
+    else:
+        print("no cycle found")
+    draw_circle_graph(v, e)
     
     
-
-
+    
 
 
 if __name__ == "__main__":
