@@ -13,7 +13,7 @@ import common.adjacency_matrix as adjacency_matrix
 import common.adjacency_list as adjacency_list
 import common.incidence_matrix as incidence_matrix
 from common.circle_graph import draw_circle_graph
-import common.generate_random_graph as generate_random_graph
+import common.generate_graph as generate_graph
 import common.conversions as conversions
 def main():
     print("Adjacency list")
@@ -66,7 +66,7 @@ def main():
     for line in graph:
         print(line)
 
-    size, edges = generate_random_graph.generate_random_graph(20, edges = 190)
+    size, edges = generate_graph.generate_random_graph(20, edges = 190)
     print(len(edges))
     draw_circle_graph(size, edges)
 

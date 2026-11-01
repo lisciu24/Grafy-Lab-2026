@@ -13,10 +13,10 @@
 # 4. Zaimplementować algorytm Johnsona do szukania odegłości pomiędzy
 #    wszystkimi parami wierzchołków na ważonym grafie skierowanym.
 
-from common import adjacency_list, adjacency_matrix
+from common import adjacency_list, adjacency_matrix, components
 from common import util, conversions
-from common.generate_random_graph import generate_random_graph, generate_random_weights
-from common import kosaraju, shortest_path
+from common.generate_graph import generate_random_graph, generate_random_weights
+from common import shortest_path
 
 def main():
     graph = conversions.adjacency_list_to_adjacency_matrix(adjacency_list.from_file("zestawy/zestaw4/input_graph.txt"), digraph=True)
@@ -24,7 +24,7 @@ def main():
     util.print_matrix(graph)
     weights = adjacency_matrix.from_file("zestawy/zestaw4/input_weights.txt")
 
-    nr, comp = kosaraju.kosaraju(graph)
+    nr, comp = components.kosaraju(graph)
     d : dict[int, list[int]] = {}
     for v, n in enumerate(comp):
         d.setdefault(n, []).append(v)
