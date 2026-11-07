@@ -42,7 +42,7 @@ def generate_graph_from_sequence(sequence: list[int]) -> tuple[int, list[tuple[i
     s = sequence
     v = len(sequence)
     e = []
-    finished = False
+    finished = not v > 0
     id_s = [[i, s[i]] for i in range(len(s))]
     id_s = sorted(id_s, key=lambda x: x[1], reverse=True)
 
@@ -59,7 +59,7 @@ def generate_graph_from_sequence(sequence: list[int]) -> tuple[int, list[tuple[i
     return v, e
 
 def random_k_regular_graph(n: int, k: int) -> tuple[int, list[tuple[int, int]]]:
-    if n <= k or (k%2 == 1 and n%2 == 1):
+    if (n <= k and k != 0) or (k%2 == 1 and n%2 == 1):
         raise ValueError("invalid input")
     sequence = [k] * n
     v, e = generate_graph_from_sequence(sequence)
@@ -68,10 +68,10 @@ def random_k_regular_graph(n: int, k: int) -> tuple[int, list[tuple[int, int]]]:
     return v, e
 
 
-def generate_eulerian(size: int = 0) -> tuple[int, list[tuple[int, int]]]:
-    if not size:
+def generate_eulerian(size: int | None = None) -> tuple[int, list[tuple[int, int]]]:
+    if size == None:
         size = randint(3, 10)
-    if size < 3:
+    elif size < 3:
         raise ValueError("eulerian graph needs at least 3 vertices")
 
     solid = False

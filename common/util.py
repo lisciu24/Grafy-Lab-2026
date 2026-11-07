@@ -25,6 +25,7 @@ def draw_graph(graph: list[list[int]], weights: list[list[int]] | None = None, *
     if weights is not None:
         edges = [(u, v, {"weight": weights[u][v]}) for u, v in edges]
     G = nx.DiGraph(edges) if digraph else nx.Graph(edges)
+    G.add_nodes_from(range(vertices))
     pos = {}
     for i in range(vertices):
         alpha = 2 * math.pi / vertices

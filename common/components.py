@@ -52,6 +52,9 @@ def components(size: int, edges: list[tuple[int,int]]) -> list[int]:
 
 def biggest_component(comp: list[int]) -> list[int]:
     count = Counter(comp)
-    biggest_nr = max(count, key=count.get) # type: ignore
-    members = [v for v in range(len(comp)) if comp[v] == biggest_nr]
+    if count:
+        biggest_nr = max(count, key=count.get) # type: ignore
+        members = [v for v in range(len(comp)) if comp[v] == biggest_nr]
+    else:
+        members = []
     return members

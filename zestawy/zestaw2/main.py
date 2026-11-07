@@ -17,7 +17,8 @@
 # 6. Napisać program do sprawdzania (dla małych grafów), czy graf jest
 #    hamiltonowski.
 
-from common import incidence_matrix
+from common.util import draw_graph
+from common import adjacency_matrix
 from common.circle_graph import draw_circle_graph
 from common import generate_graph, components, cycles
 
@@ -28,6 +29,12 @@ def main():
     sequences = [
         [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2],
         [4, 4, 3, 1, 2],
+        [],
+        [1, 1, 1],
+        [1, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [4, 4, 3, 3, 3],
+        [3, 3, 3, 3]
     ]
     for sequence in sequences:
         print(f'\nsequence: {sequence}')
@@ -35,44 +42,54 @@ def main():
             print("sequence is not graphical - skipping")
             continue
         vertices, edges = generate_graph.generate_graph_from_sequence(sequence)
-        graph = incidence_matrix.create_matrix(vertices, edges)
+        graph = adjacency_matrix.create_matrix(vertices, edges)
         for line in graph:
             print(line)
-        draw_circle_graph(vertices, edges)
+        draw_graph(graph)
 
 
     #TASK 2
     print("\n\n===task 2 - randomize graph")
     sequence = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2]
+    #sequence = [3, 3, 2, 2]
     vertices, edges = generate_graph.generate_graph_from_sequence(sequence)
-    draw_circle_graph(vertices, edges)
+    graph1 = adjacency_matrix.create_matrix(vertices, edges)
+    draw_graph(graph1)
     print("edges before randomization: ", edges)
-    generate_graph.randomize_graph(edges, 10)
-    draw_circle_graph(vertices, edges)
+    generate_graph.randomize_graph(edges, 5)
+    graph2 = adjacency_matrix.create_matrix(vertices, edges)
+    draw_graph(graph2)
     print("edges after randomization: ", edges)
 
 
     #TASK 3
     print("\n\n===task 3 - find biggest graph component")
     vertices, edges = generate_graph.generate_random_graph(10, 6)
+    #vertices, edges = generate_graph.generate_graph_from_sequence([2,2,2,1,1,1,1,0,0])
+    #vertices, edges = generate_graph.generate_graph_from_sequence([0, 0, 0])
+    #vertices, edges = generate_graph.generate_graph_from_sequence([])
     comp = components.components(vertices, edges)
     members = components.biggest_component(comp)
     print("biggest component members: ", members)
-    draw_circle_graph(vertices, edges)
+    graph = adjacency_matrix.create_matrix(vertices, edges)
+    draw_graph(graph)
 
 
     #TASK 4
     print("\n\n===task 4 - generate random Eulerian graph and find Eulerian cycle")
-    v, e = generate_graph.generate_eulerian(8)
+    v, e = generate_graph.generate_eulerian(5)
     cycle = cycles.find_euler_cycle(v, e)
     print("cycle: ", cycle)
-    draw_circle_graph(v, e)
+    graph = adjacency_matrix.create_matrix(v, e)
+    draw_graph(graph)
 
 
     #TASK 5
     print("\n\n===task 5 - generate random k-regular graph")
-    v, e = generate_graph.random_k_regular_graph(10, 3)
-    draw_circle_graph(v, e)
+    v, e = generate_graph.random_k_regular_graph(6, 2)
+    # v, e = generate_graph.random_k_regular_graph(0, 0)
+    graph = adjacency_matrix.create_matrix(v, e)
+    draw_graph(graph)
 
 
     #TASK 6
@@ -82,7 +99,7 @@ def main():
         print("cycle: ", cycle)
     else:
         print("no cycle found")
-    draw_circle_graph(v, e)
+    # draw_circle_graph(v, e)
     
 
 if __name__ == "__main__":

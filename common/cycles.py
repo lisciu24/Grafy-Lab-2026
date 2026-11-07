@@ -53,6 +53,8 @@ def find_hamilton(v, e):
 
         return False
 
+    if v == 0:
+        return None
     if backtrack(0): #starting backtracking ad vertex 0. if returns true - hamilton found
         path.append(0)  
         return path
