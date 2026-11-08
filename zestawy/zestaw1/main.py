@@ -23,15 +23,19 @@ conversions_input_config = [
         label="Wybierz formatowanie", 
         type="choice",
         options=[
-            user_input.Option("am", "adjacency matrix"), 
-            user_input.Option("al", "adjacency list"), 
-            user_input.Option("im", "incidence matrix")
+            user_input.Option("am", "adjacency matrix", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_am.txt")
+            ]), 
+            user_input.Option("al", "adjacency list", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_al.txt")
+            ]), 
+            user_input.Option("im", "incidence matrix", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_im.txt")
+            ])
         ]
-    ),
-    user_input.Field(
-        key="filename",
-        label="Nazwa pliku",
-        type="str",
     )
 ]
 
@@ -56,8 +60,8 @@ generation_input_config = [
 
 def main():
     config_result = user_input.get_input(conversions_input_config)
-    input_format = config_result["format"]
-    filename = config_result["filename"]
+    input_format, params = next(iter(config_result["format"].items()))
+    filename = params["filename"]
 
     if input_format == "al":
         graph = adjacency_list.from_file(filename)

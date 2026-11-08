@@ -7,6 +7,7 @@ class Field:
     label: str
     type: str
     default: Any = None
+    required: bool = True
     options: list[Option] | None = None
 
 @dataclass
@@ -15,14 +16,22 @@ class Option:
     label: str
     fields: list[Field] | None = None
 
-def _read_value(field: Field) -> str | int | float:
+def _read_value(field: Field) -> str | int | float | None:
     while True:
         suffix = f" [{field.default}]" if field.default is not None else ""
         raw = input(f"{field.label}{suffix}: ").strip()
 
         if not raw:
             if field.default is not None:
+                print(f"Użyto wartości domyślnej: {field.default}")
                 return field.default
+            
+            if not field.required:
+                print("Pominięto")
+                return None
+            else:
+                print("Wartość wymagana")
+
             continue
 
         try:
@@ -37,7 +46,7 @@ def _read_value(field: Field) -> str | int | float:
         except ValueError as error:
             print(f"Niepoprawna warość: {error}")
             
-def _read_choice(field: Field) -> Option:
+def _read_choice(field: Field) -> Option | None:
     assert(field.options is not None)
 
     print(f"\n{field.label}")
@@ -45,10 +54,27 @@ def _read_choice(field: Field) -> Option:
         print(f" ({i}) {option.label}")
 
     while True:
+        raw = input("Wybór: ").strip()
+
+        if not raw:
+            if field.default is not None:
+                print(f"Użyto wartości domyślnej: {field.default.label}")
+                return field.default
+
+            if not field.required:
+                print(f"Pominięto")
+                return None
+            else:
+                print("Wartość wymagana")
+
+            continue
+
         try:
-            choice = int(input("Wybór: "))
+            choice = int(raw)
             if 1 <= choice <= len(field.options):
                 return field.options[choice -1]
+            else:
+                raise ValueError
 
         except ValueError:
             print("Podaj numer opcji")
@@ -59,10 +85,13 @@ def get_input(config: list[Field]) -> dict[str, Any]:
     for field in config:
         if field.type == "choice":
             selected = _read_choice(field)
-            if selected.fields: 
-                result[field.key] = {selected.key: get_input(selected.fields)}
+            if selected:
+                if selected.fields: 
+                    result[field.key] = {selected.key: get_input(selected.fields)}
+                else:
+                    result[field.key] = selected.key 
             else:
-                result[field.key] = selected.key
+                result[field.key] = None
         else:
             result[field.key] = _read_value(field)
 
