@@ -9,6 +9,7 @@ class Field:
     default: Any = None
     required: bool = True
     options: list[Option] | None = None
+    item_type: str = "str"
 
 @dataclass
 class Option:
@@ -16,40 +17,70 @@ class Option:
     label: str
     fields: list[Field] | None = None
 
+_converters = {
+    "str": str,
+    "int": int,
+    "float": float
+}
+
+def _check_raw(field: Field, raw: Any):
+    if field.default is not None:
+        print(f"Użyto wartości domyślnej: {field.default}")
+        return True, field.default
+
+    if not field.required:
+        print("Pominięto")
+        return True, None
+    else:
+        print("Wartość wymagana")
+
+    return False, None
+
+def _read_list(field: Field) -> list[str|int|float] | None:
+    assert field.item_type in _converters, "Niepoprawny typ dla wartości listy"
+    assert field.default is None or type(field.default) == list[_converters[field.item_type]], "Default value must be a list of item_type values"
+    
+    conv = _converters[field.item_type]
+    while True:
+        suffix = f" [{field.default}]" if field.default is not None else ""
+        raw = input(f"{field.label}{suffix} (oddziel spacjami): ").strip()
+
+        if not raw:
+            ret, val = _check_raw(field, raw)
+            if ret: return val
+
+            continue
+
+        try:
+            return [conv(x) for x in raw.split()]
+        except ValueError:
+            print(f"Błąd podczas wprowadzania danych, oczekiwano listy typu: {field.item_type}")
+
+
 def _read_value(field: Field) -> str | int | float | None:
+    assert field.default is None or type(field.default) == _converters[field.type], "Default value must match field type"
+
     while True:
         suffix = f" [{field.default}]" if field.default is not None else ""
         raw = input(f"{field.label}{suffix}: ").strip()
 
         if not raw:
-            if field.default is not None:
-                print(f"Użyto wartości domyślnej: {field.default}")
-                return field.default
-            
-            if not field.required:
-                print("Pominięto")
-                return None
-            else:
-                print("Wartość wymagana")
+            ret, val = _check_raw(field, raw)
+            if ret: return val
 
             continue
 
         try:
-            if field.type == "str":
-                return raw
-            if field.type == "int":
-                return int(raw)
-            if field.type == "float":
-                return float(raw)
-            else:
-                raise ValueError(f"Nieobsługiwany typ: {field.type}")
+            return _converters[field.type](raw)
         except ValueError as error:
             print(f"Niepoprawna warość: {error}")
             
 def _read_choice(field: Field) -> Option | None:
-    assert(field.options is not None)
+    assert field.options, "Specify options for choice type"
+    assert field.default is None or type(field.default) == Option, "Default may be None or Option for choice type"
 
-    print(f"\n{field.label}")
+    suffix = f" [{field.default.label}]" if field.default is not None else ""
+    print(f"\n{field.label}{suffix}")
     for i, option in enumerate(field.options, 1):
         print(f" ({i}) {option.label}")
 
@@ -57,15 +88,8 @@ def _read_choice(field: Field) -> Option | None:
         raw = input("Wybór: ").strip()
 
         if not raw:
-            if field.default is not None:
-                print(f"Użyto wartości domyślnej: {field.default.label}")
-                return field.default
-
-            if not field.required:
-                print(f"Pominięto")
-                return None
-            else:
-                print("Wartość wymagana")
+            ret, val = _check_raw(field, raw)
+            if ret: return val
 
             continue
 
@@ -92,7 +116,11 @@ def get_input(config: list[Field]) -> dict[str, Any]:
                     result[field.key] = selected.key 
             else:
                 result[field.key] = None
-        else:
+        elif field.type == "list":
+            result[field.key] = _read_list(field)
+        elif field.type in _converters:
             result[field.key] = _read_value(field)
+        else:
+            print(f"Nieobsługiwany typ: {field.type} dla {field}")
 
     return result
