@@ -45,7 +45,7 @@ def main():
         graph = adjacency_matrix.create_matrix(vertices, edges)
         for line in graph:
             print(line)
-        draw_graph(graph)
+        draw_graph(vertices, edges)
 
 
     #TASK 2
@@ -53,12 +53,10 @@ def main():
     sequence = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2]
     #sequence = [3, 3, 2, 2]
     vertices, edges = generate_graph.generate_graph_from_sequence(sequence)
-    graph1 = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph1)
+    draw_graph(vertices, edges)
     print("edges before randomization: ", edges)
     generate_graph.randomize_graph(edges, 5)
-    graph2 = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph2)
+    draw_graph(vertices, edges)
     print("edges after randomization: ", edges)
 
 
@@ -71,8 +69,7 @@ def main():
     comp = components.components(vertices, edges)
     members = components.biggest_component(comp)
     print("biggest component members: ", members)
-    graph = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph)
+    draw_graph(vertices, edges)
 
 
     #TASK 4
@@ -80,16 +77,14 @@ def main():
     v, e = generate_graph.generate_eulerian(5)
     cycle = cycles.find_euler_cycle(v, e)
     print("cycle: ", cycle)
-    graph = adjacency_matrix.create_matrix(v, e)
-    draw_graph(graph)
+    draw_graph(v, e)
 
 
     #TASK 5
     print("\n\n===task 5 - generate random k-regular graph")
     v, e = generate_graph.random_k_regular_graph(6, 2)
     # v, e = generate_graph.random_k_regular_graph(0, 0)
-    graph = adjacency_matrix.create_matrix(v, e)
-    draw_graph(graph)
+    draw_graph(v, e)
 
 
     #TASK 6

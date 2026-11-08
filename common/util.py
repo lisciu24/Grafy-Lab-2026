@@ -20,11 +20,9 @@ def print_path(d: list[float], p: list[int|None], start: int, end: int) -> None:
     path.reverse()
     print(f"d({end})\t= {d[end]}\t ==> [{" - ".join(path)}]")
 
-def draw_graph(graph: list[list[int]], weights: list[list[int]] | None = None, *, digraph:bool = False, x_origin: float = 0.0, y_origin: float = 0.0, radius: float = 1.0):
-    vertices, edges = adjacency_matrix.get_edges(graph)
-    if weights is not None:
-        edges = [(u, v, {"weight": weights[u][v]}) for u, v in edges]
-    G = nx.DiGraph(edges) if digraph else nx.Graph(edges)
+def draw_graph(vertices: int, edges: list[tuple[int,int]], weights: list[list[int]] | None = None, *, digraph:bool = False, x_origin: float = 0.0, y_origin: float = 0.0, radius: float = 1.0):
+    graph_edges = edges if weights is None else [(u, v, {"weight": weights[u][v]}) for u, v in edges]
+    G = nx.DiGraph(graph_edges) if digraph else nx.Graph(graph_edges)
     G.add_nodes_from(range(vertices))
     pos = {}
     for i in range(vertices):
@@ -34,7 +32,7 @@ def draw_graph(graph: list[list[int]], weights: list[list[int]] | None = None, *
         pos[i] = (x, y)
 
     nx.draw_networkx_nodes(G, pos)
-    nx.draw_networkx_edges(G, pos, edgelist=edges)
+    nx.draw_networkx_edges(G, pos)
     nx.draw_networkx_labels(G, pos)
 
     edge_labels = nx.get_edge_attributes(G, "weight")
