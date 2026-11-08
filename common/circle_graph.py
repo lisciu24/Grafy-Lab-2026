@@ -4,6 +4,7 @@ import math
 
 def draw_circle_graph(vertices: int, edges: list[tuple[int, int]], x_origin: float = 0.0, y_origin: float = 0.0, radius: float = 1.0):
     G = nx.Graph(edges)
+    G.add_nodes_from(range(vertices))
     pos = {}
     for i in range(vertices):
         alpha = 2 * math.pi / vertices
