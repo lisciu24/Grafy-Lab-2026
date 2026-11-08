@@ -89,7 +89,7 @@ def main():
     v, e = generate_graph.generate_eulerian(n)
     cycle = cycles.find_euler_cycle(v, e)
     print("cycle: ", cycle)
-    draw_graph(v, e)
+    draw_graph(v, e, cycles=[cycle])
 
 
     #TASK 5
@@ -110,9 +110,9 @@ def main():
     cycle = cycles.find_hamilton(v, e)
     if cycle:
         print("cycle: ", cycle)
+        draw_graph(v, e, cycles=[cycle])
     else:
         print("no cycle found")
-    # draw_circle_graph(v, e)
     
 
 if __name__ == "__main__":
