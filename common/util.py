@@ -40,7 +40,7 @@ def draw_graph(vertices: int, edges: list[tuple[int,int]], weights: list[list[in
         for i, cycle in enumerate(cycles):
             color = cmap(i % 20)
             cycle_edges = list(zip(cycle[:-1], cycle[1:]))
-            nx.draw_networkx_edges(G, pos, edgelist=cycle_edges, edge_color="r", arrows=True, arrowstyle="-|>")
+            nx.draw_networkx_edges(G, pos, edgelist=cycle_edges, edge_color=color, arrows=True, arrowstyle="-|>")
 
     edge_labels = nx.get_edge_attributes(G, "weight")
     nx.draw_networkx_edge_labels(G, pos, edge_labels)
