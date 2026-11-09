@@ -19,13 +19,20 @@
 
 from common.util import draw_graph
 from common import adjacency_matrix
-from common.circle_graph import draw_circle_graph
 from common import generate_graph, components, cycles
+from common import user_input
 
 def main():
 
     #TASK 1
     print("===task 1 - graphical sequence===")
+    input_result = user_input.get_input([
+        user_input.Field("seq", "Sekwencja", "list", item_type="int", required=False)
+    ])
+
+    seq = input_result["seq"]
+    graphical_seq = generate_graph.check_if_graphical(seq) if seq else False
+    graph_seq = generate_graph.generate_graph_from_sequence(seq) if graphical_seq else None
     sequences = [
         [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2],
         [4, 4, 3, 1, 2],
@@ -35,7 +42,8 @@ def main():
         [0, 0, 0, 0, 0],
         [4, 4, 3, 3, 3],
         [3, 3, 3, 3]
-    ]
+    ] if not seq else [seq]
+
     for sequence in sequences:
         print(f'\nsequence: {sequence}')
         if not generate_graph.check_if_graphical(sequence):
@@ -45,51 +53,56 @@ def main():
         graph = adjacency_matrix.create_matrix(vertices, edges)
         for line in graph:
             print(line)
-        draw_graph(graph)
+        draw_graph(vertices, edges)
 
 
     #TASK 2
     print("\n\n===task 2 - randomize graph")
-    sequence = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2]
+    sequence = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2] if not graphical_seq else seq
     #sequence = [3, 3, 2, 2]
     vertices, edges = generate_graph.generate_graph_from_sequence(sequence)
-    graph1 = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph1)
+    draw_graph(vertices, edges)
     print("edges before randomization: ", edges)
     generate_graph.randomize_graph(edges, 5)
-    graph2 = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph2)
+    draw_graph(vertices, edges)
     print("edges after randomization: ", edges)
 
 
     #TASK 3
     print("\n\n===task 3 - find biggest graph component")
-    vertices, edges = generate_graph.generate_random_graph(10, 6)
+    vertices, edges = generate_graph.generate_random_graph(10, 6) if not graph_seq else graph_seq
     #vertices, edges = generate_graph.generate_graph_from_sequence([2,2,2,1,1,1,1,0,0])
     #vertices, edges = generate_graph.generate_graph_from_sequence([0, 0, 0])
     #vertices, edges = generate_graph.generate_graph_from_sequence([])
     comp = components.components(vertices, edges)
     members = components.biggest_component(comp)
     print("biggest component members: ", members)
-    graph = adjacency_matrix.create_matrix(vertices, edges)
-    draw_graph(graph)
+    draw_graph(vertices, edges)
 
 
     #TASK 4
     print("\n\n===task 4 - generate random Eulerian graph and find Eulerian cycle")
-    v, e = generate_graph.generate_eulerian(5)
+    input_result = user_input.get_input([
+        user_input.Field("n", "Liczba wierzchołków", "int", default=5)
+    ])
+    n = input_result["n"]
+    v, e = generate_graph.generate_eulerian(n)
     cycle = cycles.find_euler_cycle(v, e)
     print("cycle: ", cycle)
-    graph = adjacency_matrix.create_matrix(v, e)
-    draw_graph(graph)
+    draw_graph(v, e, cycles=[cycle])
 
 
     #TASK 5
     print("\n\n===task 5 - generate random k-regular graph")
-    v, e = generate_graph.random_k_regular_graph(6, 2)
+    input_result = user_input.get_input([
+        user_input.Field("n", "Liczba wierzchołków", "int", default=6),
+        user_input.Field("k", "Stopień wierzchołków", "int", default=2)
+    ])
+    n = input_result["n"]
+    k = input_result["k"]
+    v, e = generate_graph.random_k_regular_graph(n, k)
     # v, e = generate_graph.random_k_regular_graph(0, 0)
-    graph = adjacency_matrix.create_matrix(v, e)
-    draw_graph(graph)
+    draw_graph(v, e)
 
 
     #TASK 6
@@ -97,9 +110,9 @@ def main():
     cycle = cycles.find_hamilton(v, e)
     if cycle:
         print("cycle: ", cycle)
+        draw_graph(v, e, cycles=[cycle])
     else:
         print("no cycle found")
-    # draw_circle_graph(v, e)
     
 
 if __name__ == "__main__":

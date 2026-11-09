@@ -15,7 +15,98 @@ import common.incidence_matrix as incidence_matrix
 from common.circle_graph import draw_circle_graph
 import common.generate_graph as generate_graph
 import common.conversions as conversions
+from common import user_input, util
+
+conversions_input_config = [
+    user_input.Field(
+        key="format", 
+        label="Wybierz formatowanie", 
+        type="choice",
+        options=[
+            user_input.Option("am", "adjacency matrix", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_am.txt")
+            ]), 
+            user_input.Option("al", "adjacency list", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_al.txt")
+            ]), 
+            user_input.Option("im", "incidence matrix", fields=[
+                user_input.Field("filename", "Ścieżka do pliku", "str", 
+                                     default="zestawy/zestaw1/input_im.txt")
+            ])
+        ]
+    )
+]
+
+generation_input_config = [
+    user_input.Field(
+        key="gen_method",
+        label="Wybierz sposób generowania grafu",
+        type="choice",
+        options=[
+            user_input.Option("prob", "G(n, p)", fields=[
+                user_input.Field("n", "Liczba wierzchołków", "int"),
+                user_input.Field("p", "Prawdobodobieństwo krawędzi", "float")
+            ]),
+            user_input.Option("edge", "G(n, l)", fields=[
+                user_input.Field("n", "Liczba wierzchołków", "int"),
+                user_input.Field("l", "Liczba krawędzi", "int")
+            ])
+        ]
+    )
+]
+
+
 def main():
+    config_result = user_input.get_input(conversions_input_config)
+    input_format, params = next(iter(config_result["format"].items()))
+    filename = params["filename"]
+
+    if input_format == "al":
+        graph = adjacency_list.from_file(filename)
+        print("Wczytano z listy sąsiedztwa")
+        util.print_list(graph)
+        print("Macierz sąsiedztwa")
+        print(conversions.adjacency_list_to_adjacency_matrix(graph))
+        print("Macierz incidencji")
+        print(conversions.adjacency_list_to_incidence_matrix(graph))
+    elif input_format == "am":
+        graph = adjacency_matrix.from_file(filename)
+        print("Wczytano z macierzy sąsiedztwa")
+        util.print_matrix(graph)
+        print("Lista sąsiedztwa")
+        util.print_list(conversions.adjacency_matrix_to_adjacency_list(graph))
+        print("Macierz incidencji")
+        util.print_matrix(conversions.adjacency_matrix_to_incidence_matrix(graph))
+    elif input_format == "im":
+        graph = incidence_matrix.from_file(filename)
+        print("Wczytano z listy sąsiedztwa")
+        util.print_matrix(graph)
+        print("Macierz sąsiedztwa")
+        util.print_list(conversions.incidence_matrix_to_adjacency_list(graph))
+        print("Macierz incidencji")
+        util.print_matrix(conversions.incidence_matrix_to_adjacency_matrix(graph))
+
+
+    config_result = user_input.get_input(generation_input_config)
+    method, params = next(iter(config_result["gen_method"].items()))
+    size, edges = 0,[]
+    if method == "prob":
+        size, edges = generate_graph.generate_random_graph(params["n"], edges_prob=params["p"])
+        print(size, edges)
+    elif method == "edge":
+        size, edges = generate_graph.generate_random_graph(params["n"], edges=params["l"])
+        print(size, edges)
+
+    draw_circle_graph(size, edges)
+    
+
+
+    return 
+    ###################################################################
+    # Poniżej jest stary zahardkodowany kod prezentowany na zajęciach #
+    ###################################################################
     print("Adjacency list")
     V1 = 4
     edges1 = [(0, 1), (1, 2), (1, 3), (2, 3), (3, 0)]
