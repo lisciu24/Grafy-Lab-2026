@@ -20,12 +20,35 @@
 # 5. Wyznaczyć minimalne drzewo rozpinające (algorytm Prima lub Kruskala).
 
 from common import adjacency_list, adjacency_matrix, conversions, shortest_path
-from common import util, spanning_tree
+from common import util, spanning_tree, components, generate_graph
+
+GENERATE_GRAPGH = True
+GENERATE_WEIGHTS = True
 
 def main():
-    graph = conversions.adjacency_list_to_adjacency_matrix(
-        adjacency_list.from_file("zestawy/zestaw3/input_graph.txt"))
-    weights = adjacency_matrix.from_file("zestawy/zestaw3/input_weights.txt")
+
+    size, edges = generate_graph.generate_solid(5, 8)
+    graph = adjacency_matrix.create_matrix(size, edges)
+    util.print_matrix(graph)
+
+    if not GENERATE_GRAPGH:
+        graph = conversions.adjacency_list_to_adjacency_matrix(
+            adjacency_list.from_file("zestawy/zestaw3/input_graph.txt"))
+
+    size, edges = adjacency_matrix.get_edges(graph);
+    comp = components.components(size, edges)
+    if size != len(components.biggest_component(comp)):
+        print("Graf nie jest spójny")
+        return
+
+    weights = generate_graph.generate_random_weights(graph, 1, 10)
+    if not GENERATE_GRAPGH and not GENERATE_WEIGHTS:
+        weights = adjacency_matrix.from_file("zestawy/zestaw3/input_weights.txt")
+
+    print()
+    util.print_matrix(weights)
+
+    util.draw_graph(size, edges, weights, circle=False)
 
     _, d, p = shortest_path.dijkstra(graph, weights, 0)
 
@@ -45,8 +68,13 @@ def main():
 
     print()
 
-    print(spanning_tree.mst_prim(graph, weights))
-    print(spanning_tree.mst_kruskal(graph, weights))
+    mst = spanning_tree.mst_prim(graph, weights)
+    print(mst)
+    util.draw_graph(size, edges, weights, circle=False, mst=mst[1])
+    
+    mst = spanning_tree.mst_kruskal(graph, weights)
+    print(mst)
+    util.draw_graph(size, edges, weights, circle=False, mst=mst[1])
 
 if __name__ == "__main__":
     main()

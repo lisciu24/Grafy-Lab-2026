@@ -35,8 +35,15 @@ def generate_random_graph(vertices: int, edges: int | None = None, edges_prob: f
 
     raise Exception("Should not ever get here!")
 
-def generate_random_weights(graph: list[list[int]], min_w: int, max_w: int) -> list[list[int]]:
-    return [[randint(min_w, max_w) if graph[v][u] else 0 for u in range(len(graph))] for v in range(len(graph))]
+def generate_random_weights(graph: list[list[int]], min_w: int, max_w: int, *, digraph: bool = False) -> list[list[int]]:
+    size = len(graph)
+    w = [[randint(min_w, max_w) if graph[v][u] else 0 for u in range(size)] for v in range(size)]        
+    if not digraph:
+        for i in range(size):
+            for j in range(i, size):
+                w[i][j] = w[j][i]
+                
+    return w
 
 def generate_graph_from_sequence(sequence: list[int]) -> tuple[int, list[tuple[int, int]]]:
     s = sequence
@@ -66,6 +73,24 @@ def random_k_regular_graph(n: int, k: int) -> tuple[int, list[tuple[int, int]]]:
     randomize_graph(e, n)
 
     return v, e
+
+def generate_solid(size: int, edges: int) -> tuple[int, list[tuple[int,int]]]:
+    if size < 2:
+        return size, []
+    if edges < size - 1:
+        raise ValueError("Zbyt niska liczba krawędzi, nie można utworzyć grafu spójnego")
+    if edges > size * (size - 1) / 2:
+        raise ValueError("Zbyt duża liczba krawędzi")
+
+    g_edges = [(randint(0, i - 1), i) for i in range(1, size)]
+    existing = set(g_edges)
+    candidates = [(u, v) for u in range(size) for v in range(u + 1, size) if (u, v) not in existing]
+
+    remaining = edges - len(g_edges)
+    g_edges.extend(sample(candidates, remaining))
+
+    return size, g_edges
+        
 
 
 def generate_eulerian(size: int | None = None) -> tuple[int, list[tuple[int, int]]]:

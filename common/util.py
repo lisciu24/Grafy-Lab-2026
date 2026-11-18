@@ -20,7 +20,7 @@ def print_path(d: list[float], p: list[int|None], start: int, end: int) -> None:
     path.reverse()
     print(f"d({end})\t= {d[end]}\t ==> [{" - ".join(path)}]")
 
-def draw_graph(vertices: int, edges: list[tuple[int,int]], weights: list[list[int]] | None = None, *, cycles: list[list[int]] | None = None, digraph:bool = False, x_origin: float = 0.0, y_origin: float = 0.0, radius: float = 1.0):
+def draw_graph(vertices: int, edges: list[tuple[int,int]], weights: list[list[int]] | None = None, *, circle: bool = True, mst: list[tuple[int,int]] | None = None, cycles: list[list[int]] | None = None, digraph:bool = False, x_origin: float = 0.0, y_origin: float = 0.0, radius: float = 1.0):
     graph_edges = edges if weights is None else [(u, v, {"weight": weights[u][v]}) for u, v in edges]
     G = nx.DiGraph(graph_edges) if digraph else nx.Graph(graph_edges)
     G.add_nodes_from(range(vertices))
@@ -30,12 +30,17 @@ def draw_graph(vertices: int, edges: list[tuple[int,int]], weights: list[list[in
         x = x_origin + radius * math.cos(i * alpha)
         y = y_origin + radius * math.sin(i * alpha)
         pos[i] = (x, y)
+    if not circle:
+        pos = nx.spring_layout(G, k=1/vertices, pos=pos, seed=10)
 
     nx.draw_networkx_nodes(G, pos)
     nx.draw_networkx_edges(G, pos)
     nx.draw_networkx_labels(G, pos)
 
-    if cycles:
+    if mst:
+        nx.draw_networkx_edges(G, pos, edgelist=mst, edge_color='red')
+    
+    elif cycles:
         cmap = plt.colormaps["tab20"]
         for i, cycle in enumerate(cycles):
             color = cmap(i % 20)

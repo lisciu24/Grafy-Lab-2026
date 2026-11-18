@@ -1,5 +1,5 @@
 def mst_prim(graph: list[list[int]], 
-             weights: list[list[int]]) -> tuple[int, list[int]]:
+             weights: list[list[int]]) -> tuple[int, list[tuple[int, int]]]:
     T = [0]
     W = [i for i in range(1, len(graph))]
     res = []
@@ -13,7 +13,7 @@ def mst_prim(graph: list[list[int]],
     return sum(map(lambda e: weights[e[0]][e[1]], res)), res
 
 def mst_kruskal(graph: list[list[int]], 
-                weights: list[list[int]]) -> tuple[int, list[int]]:
+                weights: list[list[int]]) -> tuple[int, list[tuple[int, int]]]:
     edges = [(weights[u][v], u, v) for v in range(len(graph)) 
              for u in range(len(graph)) if graph[u][v]]
 
