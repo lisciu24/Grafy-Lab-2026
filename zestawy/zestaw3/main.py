@@ -27,13 +27,12 @@ GENERATE_WEIGHTS = True
 
 def main():
 
-    size, edges = generate_graph.generate_solid(5, 8)
+    size, edges = generate_graph.generate_solid(12, 36)
     graph = adjacency_matrix.create_matrix(size, edges)
     util.print_matrix(graph)
 
     if not GENERATE_GRAPGH:
-        graph = conversions.adjacency_list_to_adjacency_matrix(
-            adjacency_list.from_file("zestawy/zestaw3/input_graph.txt"))
+        graph = adjacency_matrix.from_file("zestawy/zestaw3/input_graph.txt")
 
     size, edges = adjacency_matrix.get_edges(graph);
     comp = components.components(size, edges)
