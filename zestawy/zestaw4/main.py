@@ -18,23 +18,35 @@ from common import util, conversions
 from common.generate_graph import generate_random_graph, generate_random_weights
 from common import shortest_path
 
+GENERATE_GRAPH = True
+GENERATE_WEIGHTS = True
+
 def main():
-    graph = conversions.adjacency_list_to_adjacency_matrix(adjacency_list.from_file("zestawy/zestaw4/input_graph.txt"), digraph=True)
-    # graph = adjacency_matrix.create_matrix(*generate_random_graph(10, edges_prob=0.3, digraph=True), digraph=True)
+    graph = adjacency_matrix.create_matrix(*generate_random_graph(10, edges_prob=0.2, digraph=True), digraph=True)
+
+    if not GENERATE_GRAPH:
+        graph = conversions.adjacency_list_to_adjacency_matrix(adjacency_list.from_file("zestawy/zestaw4/input_graph.txt"), digraph=True)
+
+    size, edges = adjacency_matrix.get_edges(graph, digraph=True)
     util.print_matrix(graph)
-    weights = adjacency_matrix.from_file("zestawy/zestaw4/input_weights.txt")
+    util.draw_graph(size, edges, digraph=True)
 
-    nr, comp = components.kosaraju(graph)
-    d : dict[int, list[int]] = {}
-    for v, n in enumerate(comp):
-        d.setdefault(n, []).append(v)
-
-    biggest_comp = max((len(d[n]), d[n]) for n in d)[1]
+    comp = components.kosaraju(graph)
+    print(comp)
+    util.draw_graph(size, edges, components=comp, digraph=True)
+    biggest_comp = components.biggest_component(comp)
+    print(biggest_comp)
     for v in range(len(graph) - 1, -1, -1):
         if v not in biggest_comp:
             graph = adjacency_matrix.drop_vertex(v, graph)
+
+    size, edges = adjacency_matrix.get_edges(graph, digraph=True)
+    util.print_matrix(graph)
+    util.draw_graph(size, edges, digraph=True)
      
-    # weights = generate_random_weights(graph, -5, 10)
+    weights = generate_random_weights(graph, -2, 10, digraph=True)
+    if not GENERATE_GRAPH and not GENERATE_WEIGHTS:
+        weights = adjacency_matrix.from_file("zestawy/zestaw4/input_weights.txt")
 
     good, dbf, pbf = shortest_path.bellman_ford(graph, weights, 0)
     if good:
@@ -43,15 +55,14 @@ def main():
             util.print_path(dbf, pbf, 0, end)
     else:
         print("not good")
+        return
     print()
 
     m = shortest_path.distance_matrix(graph, weights, shortest_path.bellman_ford)
     util.print_matrix(m)
-    print()
 
     m = shortest_path.johnson(graph, weights)
     util.print_matrix(m)
-    print()
 
 if __name__ == "__main__":
     main()

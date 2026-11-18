@@ -17,7 +17,7 @@ def components_r(nr: int, v: int, G: list[list[int]], comp: list[int]) -> None:
             comp[u] = nr
             components_r(nr, u, G, comp)
 
-def kosaraju(graph: list[list[int]]) -> tuple[int, list[int]]:
+def kosaraju(graph: list[list[int]]) -> list[int]:
     d = [-1 for _ in range(len(graph))]
     f = [-1 for _ in range(len(graph))]
     t = 0
@@ -35,7 +35,7 @@ def kosaraju(graph: list[list[int]]) -> tuple[int, list[int]]:
             comp[v] = nr
             components_r(nr, v, gt, comp)
         
-    return nr, comp
+    return comp
 
 def components(size: int, edges: list[tuple[int,int]]) -> list[int]:
     nr = 0
